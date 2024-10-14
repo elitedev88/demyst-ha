@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./balance-sheet-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./balance-sheet-backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - frontend
+    networks:
+      - app-network
+
+  xero-api-mock:
+    image: jaypeng2015/show-me-the-money
+    ports:
+      - "3002:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
